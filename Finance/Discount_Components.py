@@ -1,7 +1,6 @@
 import yfinance as yf
 import fredapi as fd
 import datetime as dt
-import tabulate
 
 # US Treasury Interest Rate (10 Year) https://finance.yahoo.com/quote/%5ETNX/
 tbill = yf.Ticker("^TNX")
