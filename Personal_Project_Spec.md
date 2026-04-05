@@ -127,7 +127,7 @@ There is **one** shipped experience on **`/`** (no Recruiter vs Product URL togg
 
 - **Eyebrow (uppercase):** **My Personal Project**  
 - **Headline (`<h1>`, two lines):** **Showcasing product judgment** / **on one page**  
-- **Supporting paragraph:** *I want to show how I think and what I can build. This minimum viable product site includes a bio, condensed product documentation, metrics, a feedback form, and a booking integration.*  
+- **Supporting paragraph:** *I want to show how I think and what I can build. This minimum viable product site includes a bio, condensed product documentation, metrics, a feedback form, and a booking link.*  
 - **Controls:** **Booking** CTA and **spec** control are both in the hero band (booking also appears in **`#cta`**).
 
 ### 3.2 Site structure (plan of record)
