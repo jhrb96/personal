@@ -1,8 +1,13 @@
 # My Personal Project — Complete product specification
 
-**Version:** 1.18 (implementation-aligned)  
+**Version:** 1.21 (implementation-aligned)  
 **Status:** Source of truth for implementation  
-**Repository:** [github.com/jhrb96/personal](https://github.com/jhrb96/personal)
+**Repository:** [github.com/jhrb96/jhrb-portfolio](https://github.com/jhrb96/jhrb-portfolio)
+
+**Canonical URL (live site footer — “Spec on GitHub”):**  
+[https://github.com/jhrb96/personal/blob/main/Personal_Project_Spec.md](https://github.com/jhrb96/personal/blob/main/Personal_Project_Spec.md)
+
+**Implementation mirror:** [`docs/PROJECT_CATALYST.md`](https://github.com/jhrb96/jhrb-portfolio/blob/main/docs/PROJECT_CATALYST.md) in **[jhrb96/jhrb-portfolio](https://github.com/jhrb96/jhrb-portfolio)** — keep this file and that copy aligned when editing.
 
 ---
 
@@ -31,7 +36,7 @@ This file stays the **single canonical** spec: behaviour is authoritative here a
 
 **Data, traffic, consent, and legal**
 
-6. [Traffic qualification (UTM)](#6-traffic-qualification-utm) — *allowlisted `utm_medium`*  
+6. [Traffic qualification (UTM)](#6-traffic-qualification-utm) — *UTM combinations*  
 7. [Analytics model: two reach signals](#7-analytics-model-two-reach-signals) — *qualified vs tracked visitors*  
 8. [Funnel definitions](#8-funnel-definitions) — *stages and instrumentation*  
 9. [Visitor definition (tracked visitors)](#9-visitor-definition-tracked-visitors) — *UTC day, storage, bots*  
@@ -78,7 +83,7 @@ This file stays the **single canonical** spec: behaviour is authoritative here a
 
 **Root metadata (App Router):** **`title`:** `My Personal Project — Site`. **`description`:** `Show-don't-tell site: product thesis, architecture, first-party metrics, and continuous discovery.`
 
-**What ships:** A **Next.js** app on **Vercel**, **English-only**, as a **single** on-page site on **`/`** (full **About** first below **Hero** — product intro, reverse-chron **Experience** / **Education**, press and programme cards, collapsible eras/schools — then **thesis**, **metrics**, and other narrative sections), a **public metrics story** built from **first-party** data (not Vercel Web Analytics on the public dashboard), **Google Calendar** booking, **Typeform** feedback → **Zapier** → **Notion** (+ notifications), a **first-party consent banner** that gates **analytics** while keeping **strictly necessary** experiences (including feedback) available (**§11**), and **Privacy** / **Cookie** notices at **`/privacy`** and **`/cookies`** (UK ICO–style structure).
+**What ships:** A **Next.js** app on **Vercel**, **English-only**, as a **single** on-page site on **`/`** (full **About** first below **Hero** — product intro, reverse-chron **Experience** / **Education**, press and programme cards, collapsible eras/schools — then **thesis**, **metrics**, and other narrative sections), a **public metrics story** built from **first-party** data (not Vercel Web Analytics on the public dashboard), **Google Calendar** booking, **Typeform** feedback → **Zapier** → **Notion** (+ notifications), a **first-party consent banner** that gates **analytics** while keeping **strictly necessary** experiences (including feedback) available (**§11**), and **Privacy** / **Cookie** notices at **`/privacy`** and **`/cookies`** (UK ICO–style structure; counsel-approved copy as published).
 
 ---
 
@@ -117,11 +122,11 @@ There is **one** shipped experience on **`/`** (no Recruiter vs Product URL togg
 
 **Canonical home:** **`/`** (no `mode` query). Legacy URLs with **`?mode=product`** are **stripped client-side** while preserving **hash** and other query params (e.g. UTMs).
 
-**Outbound links:** Prefer root + UTMs, e.g. `/?utm_medium=dm&utm_source=linkedin`.
+**Outbound links:** Prefer root + UTMs with **medium, source, and campaign** (required for qualified counts), e.g. `/?utm_medium=dm&utm_source=linkedin&utm_campaign=catalyst-v1`.
 
 **Primary delivery:** **Single-page** on **`/`** with stable **`#` section IDs** and sticky in-page nav. **Legacy paths** (`/about`, `/thesis`, `/architecture`, `/post-mortem`, `/social`, `/dashboard`) **redirect** to **`/#…`** anchors. **Privacy** and **Cookie** policies stay on **separate** routes, footer-linked.
 
-**`#hero`:** Besides the primary **Schedule** CTA, a **secondary control** (GitHub mark + label) opens the **complete** product spec (**`Personal_Project_Spec.md`**), using the **same canonical URL** as footer **Spec on GitHub**.
+**`#hero`:** Besides the primary **Schedule** CTA, a **secondary control** (GitHub mark + label) opens the **complete** product spec (**`Personal_Project_Spec.md`** on **`jhrb96/personal`**), using the **same canonical URL** as footer **Spec on GitHub**.
 
 **Shipped hero copy (v1)** — visible strings on **`/`** (see **`components/single-page-content.tsx`**):
 
@@ -166,19 +171,31 @@ There is **one** shipped experience on **`/`** (no Recruiter vs Product URL togg
 
 ## 5. Visual design and brand
 
-- **Direction:** **Prestige editorial** — visual flair **and** clarity; **not** gimmick-first UI. **Employer and education logos** for **factual identification** of the owner’s roles and study (**nominative use**, e.g. assets under `assets/brand/`) are **in scope**.  
+- **Direction:** **Prestige editorial** — visual flair **and** clarity; **not** **racing** IP from **inspiration reference sites** (e.g. Norris/Leclerc) or gimmick-first UI. **Employer and education logos** for **factual identification** of the owner’s roles and study (**nominative use**, e.g. assets under `assets/brand/`) are **in scope**.  
 - **Layout:** Main column **max-w-6xl** aligned with sticky header; bordered sections span the **full** column width (no mixed narrower card max-widths).  
-- **Motion:** Respect **prefers-reduced-motion**; any animated interactions must remain **accessible**.  
+- **References (inspiration only):** [Lando Norris](https://landonorris.com/), [Charles Leclerc](https://charlesleclerc.com/en/) — chapter-like depth, typography, photography rhythm, footer legal discipline.  
+- **Motion:** Respect **prefers-reduced-motion**; any Norris/Leclerc-style interactions must remain **accessible**.  
 - **Color theme:** A **manual** control SHALL set appearance to **light**, **dark**, or **system** (follow OS). The choice SHALL **persist** (e.g. local storage). The **effective** theme SHALL drive Tailwind **`dark:`** styling on the document root **and** **theme-aware assets** (e.g. separate light / dark **brand** marks under `assets/brand/` and `assets/brand/darkmodebrand/`) so logos do not rely on **`prefers-color-scheme` alone** when the user overrides theme.
 
 ---
 
 ## 6. Traffic qualification (UTM)
 
-**Qualified** sessions are defined by an allowlisted **`utm_medium`** (bucket). **`utm_source`** = specific channel. **`utm_campaign`** = optional campaign label.
+**Qualified (server, cumulative uniques)** visits are recorded only when **all** of the following hold after normalisation (trim + lowercase):
 
-| `utm_medium` | Use |
-|--------------|-----|
+1. **`utm_medium`** is present, non-empty, and matches the **allowlist** in code (`social`, `dm`, `referral`, `forum`, `email`, `event`, `job_board`). Any other medium → **not** counted as qualified.  
+2. **`utm_source`** is present and non-empty after normalisation.  
+3. **`utm_campaign`** is present and non-empty after normalisation.  
+4. Every **present** UTM value (including optional **`utm_term`** / **`utm_content`**) is at most **120** characters after normalisation.
+
+**Not qualified** for this counter: medium-only links, medium + source without campaign, non-allowlisted medium, empty/whitespace-only source or campaign, or any present value over the length cap—even if other UTM params are set.
+
+The system groups qualified hits by the **exact combination of present parameters** (normalised), e.g. `social · acquired · initial_post` for `?utm_medium=social&utm_source=acquired&utm_campaign=initial_post`. The public **`#metrics`** breakdown **omits** combinations with **zero** uniques; the **headline** qualified total is **global** uniques (one browser can appear in multiple combination rows if it used different qualified links).
+
+**Outbound hygiene:** Prefer consistent allowlisted `utm_medium` buckets when building links:
+
+| Suggested `utm_medium` | Use |
+|------------------------|-----|
 | `social` | Social network posts |
 | `dm` | Direct messages |
 | `referral` | Warm intros / forwarded links |
@@ -187,11 +204,11 @@ There is **one** shipped experience on **`/`** (no Recruiter vs Product URL togg
 | `event` | Conferences, talks, QR codes |
 | `job_board` | Hiring-related placements |
 
-**Examples:**  
+**Examples (qualified):**  
 `?utm_medium=dm&utm_source=linkedin&utm_campaign=catalyst-v1`  
-`?utm_medium=social&utm_source=x`
+`?utm_medium=social&utm_source=x&utm_campaign=intro-post`
 
-**Non-qualified:** Missing or unknown `utm_medium` → **Unattributed** / **All traffic**. **Never** merge into qualified KPIs without a label.
+**Non-qualified (for this counter):** Missing allowlisted medium, or missing/empty source or campaign, or only optional params → **Unattributed** for the UTM-qualified series. **Never** merge qualified and tracked-visitor KPIs without a label (§7).
 
 ---
 
@@ -203,7 +220,7 @@ The product uses **two** labeled series; they answer different questions.
 
 | Series | Question it answers | Consent | Implementation sketch |
 |--------|---------------------|---------|-------------------------|
-| **Qualified visitors (UTM)** | “How many **unique browsers** arrived via a qualified outbound link (allowlisted `utm_medium`)?” | **Not** required | **Edge middleware** + **httpOnly** first-party cookie + **Redis sets** (cumulative; not UTC-day buckets). |
+| **Qualified visitors (UTM)** | “How many **unique browsers** arrived with a **qualified** UTM link (allowlisted **`utm_medium`**, non-empty **`utm_source`** and **`utm_campaign`**, length rules), and **per combination** of present UTMs?” | **Not** required | **Edge middleware** gate + **httpOnly** first-party cookie + **Redis sets** (cumulative; not UTC-day buckets). |
 | **Tracked visitors / Landing** | “How many people **accepted tracking** and generated a counted visit?” | **Required** (analytics category) | **`localStorage`** + visitor increment API; **first pageview** after accept per UTC day (§9). Public **`#metrics`** shows a **cumulative** total (still at most one increment per browser per UTC day). |
 
 > **Key rule:** Never conflate the two series in UI or narrative without explicit labels. A headline for tracked visitors can be: **“Hit my qualified link and accepted tracking.”**
@@ -239,7 +256,7 @@ The product uses **two** labeled series; they answer different questions.
 
 **Rule:** At most **one** visitor increment per **UTC day** per browser profile. The **counted hit** is the **first pageview** on that calendar day **after** analytics consent that triggers the increment.
 
-**CMP:** No read/write of visitor session keys and **no** visitor-count API call **until** the user accepts the **analytics / measurement** category — must match Privacy/Cookie copy.
+**CMP:** No read/write of visitor session keys and **no** visitor-count API call **until** the user accepts the **analytics / measurement** (or counsel-defined) category — must match Privacy/Cookie copy.
 
 **Bots:** Best-effort exclusion; disclose that figures exclude automated traffic to the extent detected.
 
@@ -256,7 +273,7 @@ The product uses **two** labeled series; they answer different questions.
 | **Visitor session** (`localStorage` + visitor-count API) | **Analytics / measurement** — **only after accept** |
 | **Scroll-through** | **Essential operational** — allowed without analytics accept; **anonymous POSTs** per **ESS-1** (range excludes Typeform) |
 | **Schedule started** | **Essential operational** — **anonymous POST**; same consent boundary as scroll-through |
-| **Typeform** | **Strictly necessary** in CMP — **not** analytics-only; **Reject all** must still load embed (**TYPEFORM-1**) |
+| **Typeform** | **Strictly necessary** (or counsel equivalent) in CMP — **not** analytics-only; **Reject all** must still load embed (**TYPEFORM-1**) |
 | **Qualified visitors (UTM)** | Server-side cookie + URL — **no** analytics consent for this count; **label** distinctly vs tracked visitors |
 | **Vercel Web Analytics** | Off by default; if on → analytics consent |
 | **Public dashboard** | Composes **first-party** series only per rows above |
@@ -277,7 +294,7 @@ The product uses **two** labeled series; they answer different questions.
 
 ### 11.2 Published legal notices
 
-- **Routes:** **`/privacy`** (privacy notice), **`/cookies`** (cookie policy) — footer-linked, UK ICO–oriented structure, controller and contact **as published** in-app.  
+- **Routes:** **`/privacy`** (privacy notice), **`/cookies`** (cookie policy) — footer-linked, UK ICO–oriented structure, **counsel-approved** controller and contact **as published** in-app.  
 - **Rule:** Full legal text is **authoritative** on those pages; this spec does not duplicate it—only behaviour and routes are referenced here.
 
 ### 11.3 Alternatives (forks / greenfield)
@@ -285,6 +302,7 @@ The product uses **two** labeled series; they answer different questions.
 - **Libraries:** [Vanilla Cookie Consent](https://github.com/orestbida/cookieconsent), **`react-cookie-consent`**, or **shadcn-style** UI remain valid **alternatives** if you replace the minimal banner— you still own vendor inventory and proof of gating.  
 - **Scripts:** Non-essential scripts load **only** after appropriate consent (**CMP-1**).  
 - **Vercel** is infrastructure/processor — see [Vercel legal](https://vercel.com/legal); it is **not** a replacement for consent UX and policies.  
+- **Counsel:** **Typeform as strictly necessary**, **anonymous essential POSTs**, and **jurisdictional** rules remain review topics when changing copy or categories.
 
 ---
 
@@ -325,7 +343,7 @@ Typeform → Zapier → Notion (database row) + Slack or email
 ## 14. Metrics philosophy and KPIs
 
 - **Qualified vs All:** Always label **UTM-qualified** vs **Unattributed** / **All traffic**.  
-- **Two “qualified reach” meanings:** (1) **UTM-qualified visitors** — cumulative unique browsers with allowlisted `utm_medium` (cookie dedupe; no analytics consent). (2) **Tracked visitors** — only with consent; increments **at most once per browser per UTC day**, dashboard shows **cumulative** total. **Never** blend without labels.  
+- **Two “qualified reach” meanings:** (1) **UTM-qualified visitors** — cumulative unique browsers that met the **full UTM gate** (§6), broken down by **combination** of present params (cookie dedupe per combination; no analytics consent). (2) **Tracked visitors** — only with consent; increments **at most once per browser per UTC day**, dashboard shows **cumulative** total. **Never** blend without labels.  
 - **Stretch goals:** Shown as targets with **time bounds** and stated **hypothesis** (e.g. share of traffic from intentional outbound).  
 
 **Primary KPI (product narrative):** Funnel or intent story on **high-intent** segments — define numerator/denominator in dashboard copy (e.g. UTM-qualified visitors → **schedule started**; tracked visitors → **scroll-through** — pick and label one **primary** story on the Architecture page).
@@ -360,7 +378,7 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 
 ## 16. Content inventory
 
-**Shipped in v1:** **`#hero`** copy and root **metadata** (§1, §3.1); **Privacy** / **Cookie** pages at **`/privacy`** and **`/cookies`**; **CMP** banner strings in **`components/consent-banner.tsx`**.
+**Shipped in v1:** **`#hero`** copy and root **metadata** (§1, §3.1); **Privacy** / **Cookie** pages at **`/privacy`** and **`/cookies`** (counsel-approved); **CMP** banner strings in **`components/consent-banner.tsx`**.
 
 **Iterate / review** where copy is still open-ended:
 
@@ -374,7 +392,7 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 
 ## 17. Accessibility and i18n
 
-- **Accessibility:** Keyboard navigation, focus order, contrast, **prefers-reduced-motion**, semantic HTML; **theme control** keyboard-operable with clear name/state (see §5). **Launch standard (v1):** **no obvious blockers** on common mobile widths, keyboard paths, and one screen-reader smoke pass — not a formal WCAG conformance. Operational checklist: `openspec/changes/project-catalyst/design.md` § **Accessibility & mobile acceptance**.  
+- **Accessibility:** Keyboard navigation, focus order, contrast, **prefers-reduced-motion**, semantic HTML; **theme control** keyboard-operable with clear name/state (see §5). **Launch standard (v1):** **no obvious blockers** on common mobile widths, keyboard paths, and one screen-reader smoke pass — not a formal WCAG conformance claim unless counsel approves copy. Operational checklist: `openspec/changes/project-catalyst/design.md` § **Accessibility & mobile acceptance**.  
 - **i18n:** **English only** for v1.
 
 ---
@@ -391,7 +409,8 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 
 - **No public Booked counter:** Calendar-derived counts are **not** shown on the dashboard (Zapier without strict filters produced false positives). Confirm bookings in **Google Calendar** (and optional Zapier → Notion).  
 - **Scroll range:** Engagement **scroll-through** ends at the sentinel **before** Typeform; scrolling inside the embed does not advance the metric.  
-- **Hero / executive copy:** External copy review recommended before wide outbound (shipped MVP intro in **`#hero`** may still evolve).
+- **Hero / executive copy:** External copy review recommended before wide outbound (shipped MVP intro in **`#hero`** may still evolve).  
+- **UTM gate tightening:** After changing qualified rules, operators may run **`npm run metrics:prune-ineligible-utms`** (optional **`--dry-run`**) against KV to drop combo-index rows that no longer pass the gate (`scripts/prune-ineligible-utm-combos.mjs`).
 
 ---
 
@@ -400,11 +419,11 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 | ID | Requirement |
 |----|---------------|
 | **CMP-1** | Non-essential scripts only after relevant consent. |
-| **CMP-2** | Visitor `localStorage` + visitor-count API only after **analytics / measurement** accept. |
+| **CMP-2** | Visitor `localStorage` + visitor-count API only after **analytics / measurement** (or counsel-defined) accept. |
 | **CMP-3** | **Shipped (v1):** minimal **first-party** consent banner + **`/api/consent/analytics`** (see **§11.1**). **Fork path:** **Vanilla Cookie Consent** + App Router client boundary; inject optional scripts only after accept. |
 | **CMP-4** | Alternative: **shadcn-style** CMP UI — same **CMP-1** / **CMP-2** semantics. |
 | **ESS-1** | Scroll-through + schedule started: **essential**; **anonymous POSTs** — no stable client id; server **must not** fingerprint to individuals. |
-| **TYPEFORM-1** | Typeform in **strictly necessary**; **Reject all** still loads embed. |
+| **TYPEFORM-1** | Typeform in **strictly necessary**; **Reject all** still loads embed; counsel review. |
 | **VWA-1** | Vercel Web Analytics **off by default**; if on → consent; **never** public dashboard input. |
 
 **Acceptance:** Visitor + analytics-gated behavior matches published policies; essential paths (**ESS-1**, **TYPEFORM-1**) documented and implemented consistently.
@@ -415,11 +434,13 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 
 - [ ] Privacy + Cookie policies match **actual** scripts, storage, and subprocessors.  
 - [ ] CMP categories: analytics vs strictly necessary (Typeform) configured; **Reject all** tested.  
-- [ ] Footer: Privacy, Cookie (if any), **Spec on GitHub** → this file.  
+- [ ] Footer: Privacy, Cookie (if any), **Spec on GitHub** → canonical URL at top of this doc (**`Personal_Project_Spec.md`** on **`jhrb96/personal`**).  
 - [ ] Dashboard labels: UTM-qualified visitors vs tracked visitors; refresh cadence stated.  
 - [ ] UTMs tested on outbound links; canonical home is **`/`** (no `mode` query).  
 - [ ] Zapier flows live (Typeform → Notion; optional Calendar notifications — **not** required for app metrics).  
 - [ ] Non-negotiables copy reviewed.  
+- [ ] Counsel pass on consent + Typeform + essential POSTs (as needed).  
+- [ ] Inclusive UX: run OpenSpec `design.md` accessibility & mobile matrix on **`/`** (and production after deploy); **no obvious blockers** standard (§17).
 
 ---
 
@@ -427,7 +448,7 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 
 | Term | Meaning |
 |------|---------|
-| **Qualified visitor (UTM)** | Unique browser (first-party cookie) that arrived with allowlisted `utm_medium`; counted once per scope in cumulative Redis sets. |
+| **Qualified visitor (UTM)** | Unique browser (first-party cookie) that arrived via a URL meeting **§6** (allowlisted **`utm_medium`**, non-empty **`utm_source`** and **`utm_campaign`**, length caps); counted per **distinct combination** of present parameters in cumulative Redis sets (global total can overlap across combination rows). |
 | **Tracked visitor** | Browser counted at most once per **UTC day** after analytics consent (first qualifying pageview); **`#metrics`** displays the **cumulative** sum of those increments. |
 | **Landing** | Funnel stage = that first qualifying pageview for the visitor model. |
 | **Essential operational** | Events (scroll-through POSTs, schedule started) allowed without analytics consent; anonymous only (**ESS-1**). |
@@ -453,9 +474,12 @@ Mirror this table on the **Architecture** page and in **Privacy** subprocessors.
 | **1.13** | **UTM-qualified metric:** cumulative **unique visitors** via **`catalyst_qualified_vid`** + Redis **sets** (no UTC-day reset for that tile); legacy daily **`metrics:qualified:YYYY-MM-DD:*`** keys unused by summary. |
 | **1.14** | **Public dashboard totals:** Tracked visitors, scroll-through numerators/denominators, and schedule started use **cumulative** KV counters on **`#metrics`** (dual-written `*:total` keys); UTC-day rules apply to **when** an increment fires, not to resetting the displayed headline. |
 | **1.15** | **Copy terminology:** In-app and spec-facing prose uses **“site”** for the shipped **`/`** experience; **“portfolio”** is reserved for the **repository** name (**`jhrb-portfolio`**) in URLs and similar identifiers. |
-| **1.16** | **Display name:** Public product label **My Personal Project** (hero, metadata, footer, readme, this doc H1); technical **`catalyst_*`** keys and **`Personal_Project_Spec.md`** filename unchanged. |
+| **1.16** | **Display name:** Public product label **My Personal Project** (hero, metadata, footer, readme, this doc H1); technical **`catalyst_*`** keys and **`PROJECT_CATALYST.md`** filename unchanged. |
 | **1.17** | **Build parity:** Spec documents **shipped hero** copy, **root metadata**, **`/privacy`** / **`/cookies`**, **implemented** first-party consent banner vs **library alternatives** (**§11**); **CMP-3** updated; **§16** inventory reflects what is live; header **Version** aligned with history. |
 | **1.18** | **Readability:** **How to read** guide and **thematic** table of contents; **At a glance** under **§1**; **In this section** leads for **§3, §4, §7, §8, §10, §11, §13, §15**; **Key rule** blockquotes where helpful; **§3** retitled (dropped legacy “and modes”); **§13** ToC anchor fixed to match **Public dashboard (`#metrics`)**; appendix linked from ToC. |
+| **1.19** | **Canonical spec URL:** Footer, hero, and privacy **Related** link target **`jhrb96/personal`** **`Personal_Project_Spec.md`**; this repo retains **`docs/PROJECT_CATALYST.md`** as implementation mirror. |
+| **1.20** | **UTM-qualified metrics:** Server records **combinations** of present **`utm_medium` / `utm_source` / `utm_campaign` / `utm_term` / `utm_content`**; public breakdown lists **non-zero** rows only (e.g. `social · acquired · initial_post`); global qualified total remains cumulative uniques with any tracked UTM. |
+| **1.21** | **UTM qualified gate:** Recording requires **allowlisted `utm_medium`**, **non-empty `utm_source` and `utm_campaign`**, per-value **120**-char cap, optional **`utm_term` / `utm_content`**; middleware + KV **prune script** documented (§6, §19). |
 
 Prior iterative edits (discovery through requirements lock) are superseded by this document for implementation purposes.
 
@@ -465,7 +489,7 @@ Prior iterative edits (discovery through requirements lock) are superseded by th
 
 - **Single depth:** One layout on **`/`**; section-level composition (full **About** below **Hero**, then **thesis**, full **metrics**, and narrative sections) — no URL mode toggle.
 - **Legacy URLs:** **`?mode=product`** (and other `mode` values) are removed from the address bar on **`/`** while preserving **hash** and non-mode query params.
-- **UTM handling:** Canonical tag for home is **`/`**; marketing links may append UTMs.
+- **UTM handling:** Canonical tag for home is **`/`**; marketing links may append UTMs; qualified counts require the **full gate** in **§6**.
 
 ### Navigation + Progress
 - Sticky nav uses stable section anchors on **`/`**.
@@ -479,3 +503,4 @@ Prior iterative edits (discovery through requirements lock) are superseded by th
 ### Motion + Accessibility
 - Fade-in animations trigger once per section per load.
 - For `prefers-reduced-motion`, sections render immediately (no transition), while section-active and progress tracking remain enabled.
+- **Completion celebration (motion-only):** On **`/`**, reaching the end of the narrative progress range may trigger a **one-shot** visual burst (confetti) **once per full page load**; it does **not** run when **`prefers-reduced-motion: reduce`** is active (overlay is non-interactive and does not capture pointer events).
